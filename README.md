@@ -29,7 +29,7 @@ There is 3 specific blocks:
 * "marketcap"
 
 
-* "coins"
+"coins"
 insert your wallet (it is the public key, not the private one)
 all the pools will be tested the the currency if they do support that currency
 
