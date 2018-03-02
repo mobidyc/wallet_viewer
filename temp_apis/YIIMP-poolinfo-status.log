@@ -1,0 +1,74 @@
+{
+    "x16r": {
+        "name": "x16r", 
+        "hashrate_last24h": 20818493697.698, 
+        "workers": 1018, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00000000", 
+        "fees": 0, 
+        "actual_last24h": "0.00000", 
+        "port": 3636, 
+        "hashrate": 26965384690
+    }, 
+    "sha256": {
+        "name": "sha256", 
+        "hashrate_last24h": 350970647571890.0, 
+        "workers": 8, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00000000", 
+        "fees": 0, 
+        "actual_last24h": "0.00000", 
+        "port": 3333, 
+        "hashrate": 46661983389170
+    }, 
+    "lyra2v2": {
+        "name": "lyra2v2", 
+        "hashrate_last24h": 0, 
+        "workers": 0, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00000000", 
+        "fees": 0, 
+        "actual_last24h": 0, 
+        "port": 4533, 
+        "hashrate": 0
+    }, 
+    "scrypt": {
+        "name": "scrypt", 
+        "hashrate_last24h": 1017546680.0938, 
+        "workers": 2, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00000013", 
+        "fees": 0, 
+        "actual_last24h": "0.00000", 
+        "port": 3433, 
+        "hashrate": 1010102861
+    }, 
+    "skein": {
+        "name": "skein", 
+        "hashrate_last24h": 10524502394.635, 
+        "workers": 6, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00000000", 
+        "fees": 0, 
+        "actual_last24h": "0.00000", 
+        "port": 4933, 
+        "hashrate": 10525991317
+    }, 
+    "polytimos": {
+        "name": "polytimos", 
+        "hashrate_last24h": 869142562.3438, 
+        "workers": 17, 
+        "coins": 1, 
+        "estimate_current": "0.00000000", 
+        "estimate_last24h": "0.00012002", 
+        "fees": 0.5, 
+        "actual_last24h": "0.06457", 
+        "port": 3032, 
+        "hashrate": 874976693
+    }
+}

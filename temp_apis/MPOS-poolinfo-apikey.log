@@ -1,0 +1,23 @@
+{
+    "getpoolinfo": {
+        "version": "1.0.0", 
+        "data": {
+            "txfee_manual": 0.0001, 
+            "coinname": "Zclassic", 
+            "reward": 50, 
+            "txfee": 0.0001, 
+            "min_ap_threshold": 0.001, 
+            "cointarget": "150", 
+            "stratumport": "20575", 
+            "payout_system": "pplns", 
+            "currency": "ZCL", 
+            "confirmations": 30, 
+            "max_ap_threshold": 5000000, 
+            "fees": 0.9, 
+            "coindiffchangetarget": 1, 
+            "reward_type": "block", 
+            "txfee_auto": 0.0001
+        }, 
+        "runtime": 10.446071624756
+    }
+}

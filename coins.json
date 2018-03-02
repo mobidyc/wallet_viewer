@@ -1,0 +1,22 @@
+{
+  "coins": {
+    "YTN": { "wallets": [ "YT5MenwvnkzYGNHjRpXPLH6MmLRaEyrzZG", "Ya9TLabTSXBGfRV1zduVLhQbjoB2iBgk1W" ] },
+    "BTC": { "wallets": [ "1K3hHyGJuGT8MMEjwptcUbQTxJEAzjKwrk" ] },
+    "ZCL": { "wallets": [ "t1JReKWkPrNz1jiz67TPkrYXwvbusFXrY8E" ] },
+    "RVN": { "wallets": [ "RGn6B8X2u4Qo7dzrEH5y8EKxDSMcAP4SM2" ] },
+    "ETH": { "wallets": [ "bf6f070ed73335308e635b0d782b3eb377915f1d" ] }
+  },
+  "pools": [
+      { "url": "http://antminepool.com", "type": "yiimp" },
+      { "url": "https://miningpanda.site", "type": "yiimp" },
+      { "url": "http://pool.noip.ro", "type": "yiimp" },
+      { "url": "https://cryptopool.party", "type": "yiimp" },
+      { "url": "http://stratum.luckypool.org", "type": "mpos", "api_key": "ca1e6e72570ff851d1db2d9249ac384ca6fe92ecf9c8b4569608985f05c48a72", "user": "mobidyc"},
+      { "url": "https://cryply.luckypool.org", "type": "mpos", "api_key": "1fc9f373b1175b0626238ca9885781973b48a4798aa1848f30bc57beac1c68cb", "user": "mobidyc"},
+      { "url": "https://zclassic.miningpoolhub.com", "type": "mpos", "api_key": "f14e0fa26f83ac267a52f798f94623ed5aaef7252ca48c9dea18c85e61fa1877", "user": "mobidyc"}
+  ],
+  "marketcap": {
+      "name": "coinmarketcap",
+      "apiurl": "https://api.coinmarketcap.com/v1/ticker"
+  }
+}
