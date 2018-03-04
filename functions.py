@@ -6,6 +6,8 @@ import json
 import pprint
 import sys
 from datetime import datetime
+from decimal import *
+getcontext().prec = 10
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -77,7 +79,10 @@ def get_poolinfo_yiimp(url, debug=False):
 
         if r.status_code is not 200:
             return False
-        poolstat = json.loads(r.content)
+        try:
+            poolstat = json.loads(r.content)
+        except:
+            return False
 
         # Ugly but needed
         poolstat = {k.lower(): v for k, v in poolstat.items()}
@@ -97,7 +102,10 @@ def get_poolinfo_yiimp(url, debug=False):
 
         if r.status_code is not 200:
             return False
-        poolcurr = json.loads(r.content)
+        try:
+            poolcurr = json.loads(r.content)
+        except:
+            return False
 
         # Ugly but needed
         for k, v in poolcurr.items():
@@ -184,7 +192,7 @@ def getCoinMarket(info, debug=False):
 
 def float_value(val):
     try:
-        return float(val)
+        return Decimal(val)
     except:
         return 0.0
 
