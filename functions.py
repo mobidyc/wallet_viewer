@@ -3,8 +3,6 @@
 
 import requests
 import json
-import pprint
-import sys
 import traceback
 from datetime import datetime
 

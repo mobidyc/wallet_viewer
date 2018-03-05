@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import psutil
 import json
-import pprint
-import socket
-import sys
 import time
 import requests
 import ast
-import random
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
