@@ -5,14 +5,16 @@ import requests
 import json
 import pprint
 import sys
+import traceback
 from datetime import datetime
-from decimal import *
-getcontext().prec = 10
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
 requests.packages.urllib3.disable_warnings(SNIMissingWarning)
+
+from decimal import *
+getcontext().prec = 10
 
 
 def get_poolinfo_mpos(url, apikey, debug=False):
@@ -31,7 +33,8 @@ def get_poolinfo_mpos(url, apikey, debug=False):
             if r.status_code is not 200:
                 return False
             res = json.loads(r.content)
-        except:
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
             return False
 
         write_log(log_file, res, "w")
@@ -40,22 +43,26 @@ def get_poolinfo_mpos(url, apikey, debug=False):
     if res:
         pool = res['getpoolinfo']['data']
         algo = ""
-        try:
+        if 'algorithm' in pool.keys():
             algo = pool['algorithm']
-        except:
-            pass
-        poolinfo = {
-            'tag': 'poolinfo',
-            'url': url,
-            'coinname': pool['coinname'],
-            'currency': pool['currency'],
-            'algorithm': algo,
-            'fees': pool['fees'],
-            'port': pool['stratumport'],
-            'apikey': apikey,
-            'pooltype': 'mpos'
-        }
-        pool_arr.append(poolinfo)
+
+        try:
+            poolinfo = {
+                'tag': 'poolinfo',
+                'url': url,
+                'coinname': pool['coinname'],
+                'currency': pool['currency'],
+                'algorithm': algo,
+                'fees': pool['fees'],
+                'port': pool['stratumport'],
+                'apikey': apikey,
+                'pooltype': 'mpos'
+            }
+            pool_arr.append(poolinfo)
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
+            return False
+
     return pool_arr
 
 
@@ -74,17 +81,18 @@ def get_poolinfo_yiimp(url, debug=False):
     else:
         try:
             r = requests.get(status, verify=False)
-        except:
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
             return False
 
         if r.status_code is not 200:
             return False
         try:
             poolstat = json.loads(r.content)
-        except:
-            return False
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
 
-        # Ugly but needed
+        # Ugly but needed: lowercase the keys
         poolstat = {k.lower(): v for k, v in poolstat.items()}
 
         write_log(log_file, poolstat, "w")
@@ -97,40 +105,42 @@ def get_poolinfo_yiimp(url, debug=False):
     else:
         try:
             r = requests.get(currencies, verify=False)
-        except:
-            return False
-
-        if r.status_code is not 200:
-            return False
-        try:
+            if r.status_code is not 200:
+                return False
             poolcurr = json.loads(r.content)
-        except:
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
             return False
 
-        # Ugly but needed
+        """ Doing it in the next loop
+        # Ugly but needed: lowercase algo
         for k, v in poolcurr.items():
             for k2, v2 in v.items():
                 if k2 == 'algo':
                     v[k2] = v2.lower()
+        """
 
         write_log(log_file, poolcurr, "w")
 
     pool_arr = []
     if poolstat and poolcurr:
         for coin in poolcurr:
-            algo = poolcurr[coin]['algo']
-
-            poolinfo = {
-                'tag': 'poolinfo',
-                'url': url,
-                'coinname': poolcurr[coin]['name'],
-                'currency': coin,
-                'algorithm': algo,
-                'fees': poolstat[algo]['fees'],
-                'port': poolstat[algo]['port'],
-                'pooltype': 'yiimp'
-            }
-            pool_arr.append(poolinfo)
+            try:
+                algo = poolcurr[coin]['algo'].lower()
+                poolinfo = {
+                    'tag': 'poolinfo',
+                    'url': url,
+                    'coinname': poolcurr[coin]['name'],
+                    'currency': coin,
+                    'algorithm': algo,
+                    'fees': poolstat[algo]['fees'],
+                    'port': poolstat[algo]['port'],
+                    'pooltype': 'yiimp'
+                }
+                pool_arr.append(poolinfo)
+            except Exception:
+                print "Generic Exception: {}".format(traceback.format_exc())
+                continue
     return pool_arr
 
 
@@ -146,12 +156,13 @@ def getCoinMarket(info, debug=False):
     else:
         try:
             r = requests.get(url, verify=False)
-        except:
-            return False
-        if r.status_code is not 200:
+            if r.status_code is not 200:
+                return False
+            res = json.loads(r.content)
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
             return False
 
-        res = json.loads(r.content)
         write_log(log_file, res, "w")
 
     coins_array = []
@@ -183,8 +194,8 @@ def getCoinMarket(info, debug=False):
                 '24h_volume_eur': float_value(coin['24h_volume_eur']),
                 'market_cap_eur': float_value(coin['market_cap_eur'])
             }
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
+        except Exception:
+            print "Generic Exception: {}".format(traceback.format_exc())
             continue
 
         coins_array.append(coin_info)
@@ -205,8 +216,13 @@ def getval_from_struct(refer_value, abstract_struct, mydict):
             continue
         else:
             return getval_from_struct(refer_value, val, mydict[key])
+    # If not found
+    return False
 
 
 def write_log(dest, txt, mode):
-    with open(dest, mode) as outfile:
-        json.dump(txt, outfile, indent=4)
+    try:
+        with open(dest, mode) as outfile:
+            json.dump(txt, outfile, indent=4)
+    except Exception:
+        print "Generic Exception: {}".format(traceback.format_exc())
