@@ -12,10 +12,15 @@ DEBUG = False
 # Index creation settings
 index_name = 'cryptomoney'
 index_alias = index_name
-index_settings = { "settings" : { "number_of_shards": 1, "number_of_replicas": 0, "index.codec": "best_compression" } }
+index_settings = { "settings" : {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "index.codec": "best_compression"
+}}
 
 # Seconds between iterations
 ticktime = 60
+
 # We want to be kind with marketcap api
 marketcap_tick_times = 3
 
