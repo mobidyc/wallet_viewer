@@ -91,7 +91,8 @@ def get_poolinfo_yiimp(url, debug=False):
             print "Generic Exception: {}".format(traceback.format_exc())
 
         # Ugly but needed: lowercase the keys
-        poolstat = {k.lower(): v for k, v in poolstat.items()}
+        #poolstat = {k.lower(): v for k, v in poolstat.items()}
+        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.iteritems()}
 
         write_log(log_file, poolstat, "w")
 
