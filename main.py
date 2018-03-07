@@ -72,29 +72,30 @@ def get_wallet_infos(config):
 
                 # in case the wallet is not found or real error
                 try:
-                    if isinstance(balance, float):
-                        pass
-                    elif 'error' in balance:
+                    if 'error' in balance:
                         continue
-
-                    # If abstractstruct is not defined, we should have the value
-                    if not abstractstruct:
-                        myval = balance
-                    else:
-                        myval = getval_from_struct('@WWW@', ast.literal_eval(abstractstruct), balance)
-
-                    esdata = {
-                            'tag': 'balance',
-                            'explorer_url': explorer_url,
-                            'explorer_name': explorer_name,
-                            'currency': coin,
-                            'wallet': wallet,
-                            'balance': myval,
-                            'timestamp': ltime
-                        }
+                except TypeError:
+                    pass
                 except Exception:
                     print "Generic Exception: {}".format(traceback.format_exc())
                     continue
+
+                # If abstractstruct is not defined, we should have the value
+                if not abstractstruct:
+                    myval = balance
+                else:
+                    myval = getval_from_struct('@WWW@', ast.literal_eval(abstractstruct), balance)
+                    myval = float_value(myval)
+
+                esdata = {
+                        'tag': 'balance',
+                        'explorer_url': explorer_url,
+                        'explorer_name': explorer_name,
+                        'currency': coin,
+                        'wallet': wallet,
+                        'balance': myval,
+                        'timestamp': ltime
+                    }
 
                 wallet_infos.append(esdata)
     return wallet_infos
