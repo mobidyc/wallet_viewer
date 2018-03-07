@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+sys.dont_write_bytecode = True
+
 import json
 import time
 import requests
@@ -17,10 +20,10 @@ requests.packages.urllib3.disable_warnings(SNIMissingWarning)
 
 # Internal imports
 from config import *
-from functions import *
-
-import sys
-sys.dont_write_bytecode = True
+from resources.functions import *
+from resources.yiimp import *
+from resources.mpos import *
+from resources.coinmarket import *
 
 
 def get_pools_infos(config):
