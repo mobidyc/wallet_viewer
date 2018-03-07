@@ -72,7 +72,9 @@ def get_wallet_infos(config):
 
                 # in case the wallet is not found or real error
                 try:
-                    if 'error' in balance:
+                    if isinstance(balance, float):
+                        pass
+                    elif 'error' in balance:
                         continue
 
                     # If abstractstruct is not defined, we should have the value
