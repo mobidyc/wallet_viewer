@@ -7,6 +7,7 @@ import requests
 import ast
 from datetime import datetime
 from elasticsearch import Elasticsearch
+from elasticsearch import ElasticsearchException
 from elasticsearch.helpers import bulk
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
@@ -108,6 +109,9 @@ def create_index(es):
             es.indices.create(index=index_date, body=index_settings, ignore=400)
             # Set the alias
             es.indices.put_alias(index=index_date, name=index_alias)
+    except ElasticsearchException as e:
+        print 'ES Error: {0}'.format(e.error)
+        return False
     except Exception:
         print "Generic Exception: {}".format(traceback.format_exc())
         return False
@@ -148,6 +152,8 @@ if __name__ == '__main__':
                 i.update({'timestamp': ltime})
             try:
                 bulk(es, array_marketcap, index=index_date, doc_type=index_name, raise_on_error = False)
+            except ElasticsearchException as e:
+                print 'ES Error: {0}'.format(e.error)
             except Exception:
                 print "Generic Exception: {}".format(traceback.format_exc())
         """
@@ -165,6 +171,8 @@ if __name__ == '__main__':
         try:
             bulk(es, array_poolinfo, index=index_date, doc_type=index_name, raise_on_error = False)
             bulk(es, array_wallets, index=index_date, doc_type=index_name, raise_on_error = False)
+        except ElasticsearchException as e:
+            print 'ES Error: {0}'.format(e.error)
         except Exception:
             print "Generic Exception: {}".format(traceback.format_exc())
 
