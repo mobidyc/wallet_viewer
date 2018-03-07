@@ -19,6 +19,9 @@ requests.packages.urllib3.disable_warnings(SNIMissingWarning)
 from config import *
 from functions import *
 
+import sys
+sys.dont_write_bytecode = True
+
 
 def get_pools_infos(config):
     pools_tested = []
@@ -34,7 +37,7 @@ def get_pools_infos(config):
                 for i in poolinfo:
                     pools_tested.append(i)
         else:
-            print '{0}: {1}'.format(pool['url'], pool['type'])
+            print 'Unknown pool {0}: {1}'.format(pool['url'], pool['type'])
     return pools_tested
 
 def get_wallet_infos(config):
