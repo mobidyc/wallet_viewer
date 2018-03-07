@@ -9,7 +9,7 @@
   "pools": [
       { "url": "http://antminepool.com", "type": "yiimp" },
       { "url": "https://miningpanda.site", "type": "yiimp" },
-      { "url": "http://pool.noip.ro", "type": "yiimp" },
+      { "url": "https://pool.noip.ro", "type": "yiimp" },
       { "url": "https://cryptopool.party", "type": "yiimp" },
       { "url": "http://stratum.luckypool.org", "type": "mpos", "api_key": "ca1e6e72570ff851d1db2d9249ac384ca6fe92ecf9c8b4569608985f05c48a72", "user": "mobidyc"},
       { "url": "https://cryply.luckypool.org", "type": "mpos", "api_key": "1fc9f373b1175b0626238ca9885781973b48a4798aa1848f30bc57beac1c68cb", "user": "mobidyc"},
