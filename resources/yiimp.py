@@ -14,6 +14,8 @@ def get_poolinfo_yiimp(url, debug=False):
 
     pool_arr = []
     if poolstat and poolcurr:
+        # Ugly but needed: lowercase the keys
+        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.iteritems()}
         for coin in poolcurr:
             try:
                 algo     = poolcurr[coin]['algo'].lower()
@@ -86,9 +88,6 @@ def _get_yiimp_status(url, debug=False):
     else:
         # Ask the API
         poolstat = get_url_json(status_url)
-
-        # Ugly but needed: lowercase the keys
-        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.iteritems()}
 
         # if needed to debug
         write_log(log_file, poolstat, "w")
