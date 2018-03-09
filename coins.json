@@ -4,7 +4,8 @@
     "BTC": { "wallets": [ "1K3hHyGJuGT8MMEjwptcUbQTxJEAzjKwrk" ] },
     "ZCL": { "wallets": [ "t1JReKWkPrNz1jiz67TPkrYXwvbusFXrY8E" ] },
     "RVN": { "wallets": [ "RGn6B8X2u4Qo7dzrEH5y8EKxDSMcAP4SM2" ] },
-    "ETH": { "wallets": [ "bf6f070ed73335308e635b0d782b3eb377915f1d" ] }
+    "ETH": { "wallets": [ "bf6f070ed73335308e635b0d782b3eb377915f1d" ] },
+    "EDGY": { "wallets": [ "Eb4naYNCWNdJBuyihjWBzSvohzH7ZqqJZG" ] }
   },
   "pools": [
       { "url": "http://antminepool.com", "type": "yiimp" },
