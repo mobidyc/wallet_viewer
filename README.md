@@ -4,7 +4,7 @@ will connect to appropriated explorers/pools to grab infos and collect them into
 ## Configuration
 
 ### Global config: config.py
-With DEBUG=False each output to a web api will be logged in temp_apis/ folder
+With DEBUG=False each output to a web api will be logged in /tmp/ folder
 With DEBUG=True the files will be used instead of web request
 
 Change the Elasticsearch index settings if needed

@@ -3,6 +3,7 @@
 
 import traceback
 from resources.functions import *
+from config import *
 
 
 def get_poolinfo_yiimp(url, debug=False):
@@ -42,7 +43,7 @@ def _get_yiimp_walletex(url, wallet, debug=False):
     # {"currency": "RVN", "unsold": 1.520398350026384, "balance": 1.24986000, "unpaid": 2.77025835, "paid24h": 7.25007630, "total": 10.02033465, "miners": [{"version": "ccminer\/2.2.5", "password": "c=RVN", "ID": "", "algo": "x16r", "difficulty": 6, "subscribe": 1, "accepted": 1718008.909, "rejected": 0}]}
 
     wallet_url = '{0}/api/walletEx?address={1}'.format(url, wallet)
-    log_file = "temp_apis/YIIMP-poolinfo-wallet.log"
+    log_file = "{0}/YIIMP-poolinfo-wallet.log".format(temp_folder)
 
     if debug:
         print "DEBUG: YIIMP wallet url: {0}".format(currencies_url)
@@ -61,7 +62,7 @@ def _get_yiimp_currencies(url, debug=False):
     # {"KREDS":{"algo":"lyra2v2","port":4533,"name":"Kreds","height":19266,"workers":17,"shares":606,"hashrate":2626458401,"estimate":"0.00000","24h_blocks":37,"24h_btc":0,"lastblock":19259,"timesincelast":1473}}
 
     currencies_url = '{0}/api/currencies'.format(url)
-    log_file = "temp_apis/YIIMP-poolinfo-currency.log"
+    log_file = "{0}/YIIMP-poolinfo-currency.log".format(temp_folder)
 
     if debug:
         print "DEBUG: YIIMP currency url: {0}".format(currencies_url)
@@ -80,7 +81,7 @@ def _get_yiimp_status(url, debug=False):
     # {"lyra2v2":{"name":"lyra2v2","port":4533,"coins":1,"fees":0,"hashrate":2741907122,"workers":17,"estimate_current":"0.00000000","estimate_last24h":"0.00000000","actual_last24h":"0.00000","hashrate_last24h":2171269381.9896}}
 
     status_url = '{0}/api/status'.format(url)
-    log_file = "temp_apis/YIIMP-poolinfo-status.log"
+    log_file = "{0}/YIIMP-poolinfo-status.log".format(temp_folder)
 
     if debug:
         print "DEBUG: YIIMP status url: {0}".format(status_url)

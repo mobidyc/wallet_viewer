@@ -3,13 +3,14 @@
 
 import traceback
 from resources.functions import *
+from config import *
 
 
 def _get_mpos_info(url, apikey, debug=False):
     # {"getpoolinfo":{"version":"1.0.0","runtime":4.1921138763428,"data":{"currency":"YTN","coinname":"Yenten","cointarget":"120","coindiffchangetarget":1,"algorithm":"yescrypt","stratumport":"3333","payout_system":"prop","confirmations":100,"min_ap_threshold":1,"max_ap_threshold":250,"reward_type":"block","reward":50,"txfee":0.1,"txfee_manual":0.1,"txfee_auto":0.05,"fees":0.45}}}
 
     weburl = '{0}/index.php?page=api&action=getpoolinfo&api_key={1}'.format(url, apikey)
-    log_file = "temp_apis/MPOS-poolinfo-apikey.log"
+    log_file = "{0}/MPOS-poolinfo-apikey.log".format(temp_folder)
 
     if debug:
         print "DEBUG: MPOS info url: {0}".format(weburl)

@@ -4,6 +4,7 @@
 import traceback
 from datetime import datetime
 from resources.functions import *
+from config import *
 
 
 def getCoinMarket(info, debug=False):
@@ -11,7 +12,7 @@ def getCoinMarket(info, debug=False):
     api = info["apiurl"]
     url = '{0}/?convert=EUR&limit=0'.format(api)
 
-    log_file = "temp_apis/{0}.log".format(name)
+    log_file = "{0}/{1}.log".format(temp_folder, name)
     if debug:
         print "DEBUG: mode log file: {}".format(log_file)
         res = json.load(open(log_file))

@@ -58,7 +58,7 @@ def get_wallet_infos(config):
                 explorer_name = expl['name']
                 abstractstruct = expl['method']
 
-                log_file = "temp_apis/{coin}-{wallet}-0.log".format(coin=coin, wallet=wallet)
+                log_file = "{tmp}/{coin}-{wallet}-0.log".format(tmp=temp_folder, coin=coin, wallet=wallet)
                 url = explorer_url.replace('@WALLET@', wallet)
                 if DEBUG:
                     print "DEBUG: Explorer ({0}) currency ({1}) wallet ({2})".format(url, coin, wallet)

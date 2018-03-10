@@ -28,6 +28,7 @@ es_ip    = 'localhost'
 es_port  = '9200'
 es_url   = 'http://{0}:{1}'.format(es_ip, es_port)
 
+temp_folder = "/tmp"
 
 """
  saved passwd file not to appear in git
