@@ -28,19 +28,25 @@ from resources.coinmarket import *
 
 def get_pools_infos(config, debug=False):
     pools_tested = []
+    myruns = []
+
     for pool in config['pools']:
         if pool['type'] == 'mpos':
             poolinfo = get_poolinfo_mpos(pool['url'], pool['api_key'], debug)
-            if poolinfo:
-                for i in poolinfo:
-                    pools_tested.append(i)
+            myruns.append(poolinfo)
         elif pool['type'] == 'yiimp':
             poolinfo = get_poolinfo_yiimp(pool['url'], debug)
-            if poolinfo:
-                for i in poolinfo:
-                    pools_tested.append(i)
+            myruns.append(poolinfo)
         else:
             print 'Unknown pool {0}: {1}'.format(pool['url'], pool['type'])
+
+    # Wait for all threads to finish and get the data
+    for i in range(len(myruns)):
+        result = myruns[i].result_queue.get()
+        if result:
+            for i in result:
+                pools_tested.append(i)
+
     return pools_tested
 
 def get_wallet_infos(config):

@@ -22,6 +22,7 @@ def _get_mpos_info(url, apikey, debug=False):
     return res
 
 
+@threaded
 def get_poolinfo_mpos(url, apikey, debug=False):
     poolinfo = _get_mpos_info(url, apikey)
 

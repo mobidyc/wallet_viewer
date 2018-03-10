@@ -6,6 +6,7 @@ from resources.functions import *
 from config import *
 
 
+@threaded
 def get_poolinfo_yiimp(url, debug=False):
     """
     Retrieve pool currency informations for YIIMP type api
