@@ -82,8 +82,11 @@ def get_wallet_infos(config, timestamp):
                 if not abstractstruct:
                     myval = balance
                 else:
-                    myval = getval_from_struct('@WWW@', ast.literal_eval(abstractstruct), balance)
-                    myval = float_value(myval)
+                    if balance:
+                        myval = getval_from_struct('@WWW@', ast.literal_eval(abstractstruct), balance)
+                        myval = float_value(myval)
+                    else:
+                        myval = 0
 
                 esdata = {
                         'tag': 'balance',
@@ -124,7 +127,7 @@ if __name__ == '__main__':
         if marketcap_tick >= marketcap_tick_times:
             marketcap_tick = 0
             print 'Mamamaaaamarketcap!!!!...'
-            array_marketcap = getCoinMarket(config['marketcap'], now)
+            array_marketcap = getCoinMarket(config['marketcap'], ts)
             if array_marketcap:
                 # Ingest to ES
                 send_bulk(es, array_marketcap, index_date, index_name)
