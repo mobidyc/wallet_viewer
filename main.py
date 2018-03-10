@@ -6,21 +6,15 @@ sys.dont_write_bytecode = True
 
 import json
 import time
-import requests
 import ast
 from datetime import datetime
 from elasticsearch import Elasticsearch
-from elasticsearch import ElasticsearchException
-from elasticsearch.helpers import bulk
-
-from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-requests.packages.urllib3.disable_warnings(InsecurePlatformWarning)
-requests.packages.urllib3.disable_warnings(SNIMissingWarning)
+import pprint
 
 # Internal imports
 from config import *
 from resources.functions import *
+from resources.elastic import *
 from resources.yiimp import *
 from resources.mpos import *
 from resources.coinmarket import *
@@ -70,16 +64,7 @@ def get_wallet_infos(config):
                     print "DEBUG: Explorer ({0}) currency ({1}) wallet ({2})".format(url, coin, wallet)
                     balance = json.load(open(log_file))
                 else:
-                    try:
-                        r = requests.get(url, verify=False)
-                        if r.status_code is not 200:
-                            continue
-
-                        balance = json.loads(r.content)
-                    except Exception:
-                        print "Generic Exception: {}".format(traceback.format_exc())
-                        continue
-
+                    balance = get_url_json(url)
                     # write output to help next debug
                     write_log(log_file, balance, "w")
 
@@ -136,27 +121,21 @@ if __name__ == '__main__':
         except NameError:
             marketcap_tick = marketcap_tick_times
 
-        """
-        START MARKETCAP
-        """
         if marketcap_tick >= marketcap_tick_times:
-            print 'Mamamaaaamarketcap!!!!...'
             marketcap_tick = 0
+            """
+            START MARKETCAP
+            """
+            print 'Mamamaaaamarketcap!!!!...'
             array_marketcap = getCoinMarket(config['marketcap'])
-
-        # Ingest data
-        if array_marketcap:
-            for i in array_marketcap:
-                i.update({'timestamp': ltime})
-            try:
-                bulk(es, array_marketcap, index=index_date, doc_type=index_name, raise_on_error = False)
-            except ElasticsearchException as e:
-                print 'ES Error: {0}'.format(e.error)
-            except Exception:
-                print "Generic Exception: {}".format(traceback.format_exc())
-        """
-        END MARKETCAP
-        """
+            if array_marketcap:
+                for i in array_marketcap:
+                    i.update({'timestamp': ltime})
+                # Ingest to ES
+                send_bulk(es, array_marketcap, index_date, index_name)
+            """
+            END MARKETCAP
+            """
 
         print "pool infos... "
         array_poolinfo = get_pools_infos(config, DEBUG)
@@ -166,13 +145,9 @@ if __name__ == '__main__':
         print "wallet infos... "
         array_wallets = get_wallet_infos(config)
 
-        try:
-            bulk(es, array_poolinfo, index=index_date, doc_type=index_name, raise_on_error = False)
-            bulk(es, array_wallets, index=index_date, doc_type=index_name, raise_on_error = False)
-        except ElasticsearchException as e:
-            print 'ES Error: {0}'.format(e.error)
-        except Exception:
-            print "Generic Exception: {}".format(traceback.format_exc())
+        # Ingest to ES
+        send_bulk(es, array_poolinfo, index_date, index_name)
+        send_bulk(es, array_wallets, index_date, index_name)
 
         print "Wait for {0} seconds".format(ticktime)
         time.sleep(ticktime)
