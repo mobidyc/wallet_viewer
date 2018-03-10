@@ -6,6 +6,7 @@
     },
     "YTN": { "explorers": [{ "name": "lolpool", "url": "http://explorer.yenten.lolpool.club/ext/getbalance/@WALLET@", "method": ""}] },
     "XDG": { "explorers": [{ "name": "edgycash", "url": "http://explorer.edgy.cash/ext/getbalance/@WALLET@", "method": ""}] },
+    "SCRIV": { "explorers": [{ "name": "scriv", "url": "http://explorer.scriv.network/ext/getbalance/@WALLET@", "method": ""}] },
     "RVN": {
         "explorers": [{ "name": "threeeyed", "url": "http://threeeyed.info/ext/getbalance/@WALLET@", "method": ""}],
         "difficulty": [{ "name": "threeeyed", "url": "http://threeeyed.info/api/getdifficulty", "method": ""}],
