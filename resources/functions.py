@@ -41,7 +41,11 @@ def get_url_json(url):
         print "Decoding JSON has failed"
         return False
 
+    if isinstance(result, dict):
+	     result.update({"apiurl": url})
+
     return result
+
 
 # need to handle lists
 def getval_from_struct(refer_value, abstract_struct, mydict):

@@ -17,13 +17,20 @@ def get_poolinfo_yiimp(url, debug=False):
     if poolstat and poolcurr:
         # Ugly but needed: lowercase the keys
         poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.iteritems()}
+        try:
+            apiurl = poolcurr['apiurl']
+            del poolcurr['apiurl']
+        except Exception:
+            apiurl = url
+            pass
+
         for coin in poolcurr:
             try:
                 algo     = poolcurr[coin]['algo'].lower()
                 coinname = poolcurr[coin]['name']
                 poolinfo = {
                     'tag': 'poolinfo',
-                    'url': url,
+                    'url': apiurl,
                     'coinname': coinname,
                     'currency': coin,
                     'algorithm': algo,
