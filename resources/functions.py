@@ -4,6 +4,8 @@
 import requests
 import json
 import traceback
+from elasticsearch import Elasticsearch
+from elasticsearch import ElasticsearchException
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -66,3 +68,18 @@ def write_log(dest, txt, mode):
             json.dump(txt, outfile, indent=4)
     except Exception:
         print "Generic Exception: {}".format(traceback.format_exc())
+
+
+def create_index(es, index, index_alias, settings={}):
+    try:
+        if not es.indices.exists(index=index):
+            # Ignore 400 cause by IndexAlreadyExistsException when creating an index
+            es.indices.create(index=index, body=settings, ignore=400)
+            es.indices.put_alias(index=index, name=index_alias)
+    except ElasticsearchException as e:
+        print 'ES Error: {0}'.format(e.error)
+        return False
+    except Exception:
+        print "Generic Exception: {}".format(traceback.format_exc())
+        return False
+

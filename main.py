@@ -26,16 +26,16 @@ from resources.mpos import *
 from resources.coinmarket import *
 
 
-def get_pools_infos(config):
+def get_pools_infos(config, debug=False):
     pools_tested = []
     for pool in config['pools']:
         if pool['type'] == 'mpos':
-            poolinfo = get_poolinfo_mpos(pool['url'], pool['api_key'], DEBUG)
+            poolinfo = get_poolinfo_mpos(pool['url'], pool['api_key'], debug)
             if poolinfo:
                 for i in poolinfo:
                     pools_tested.append(i)
         elif pool['type'] == 'yiimp':
-            poolinfo = get_poolinfo_yiimp(pool['url'], DEBUG)
+            poolinfo = get_poolinfo_yiimp(pool['url'], debug)
             if poolinfo:
                 for i in poolinfo:
                     pools_tested.append(i)
@@ -108,20 +108,6 @@ def get_wallet_infos(config):
     return wallet_infos
 
 
-def create_index(es):
-    try:
-        if not es.indices.exists(index=index_date):
-            # Ignore 400 cause by IndexAlreadyExistsException when creating an index
-            es.indices.create(index=index_date, body=index_settings, ignore=400)
-            # Set the alias
-            es.indices.put_alias(index=index_date, name=index_alias)
-    except ElasticsearchException as e:
-        print 'ES Error: {0}'.format(e.error)
-        return False
-    except Exception:
-        print "Generic Exception: {}".format(traceback.format_exc())
-        return False
-
 if __name__ == '__main__':
     es = Elasticsearch( [es_ip], port=es_port, raise_on_error = False)
     while True:
@@ -133,7 +119,7 @@ if __name__ == '__main__':
         ltime = now.strftime("%Y-%m-%dT%H:%M:%S") + ".%03d" % (now.microsecond / 1000) + "Z"
         index_date = '{name}-{date}'.format(name = index_name, date = today)
 
-        create_index(es)
+        create_index(es, index_date, index_alias, index_settings)
 
         """
         We do not want to run marketcap every ticks
@@ -167,7 +153,7 @@ if __name__ == '__main__':
         """
 
         print "pool infos... "
-        array_poolinfo = get_pools_infos(config)
+        array_poolinfo = get_pools_infos(config, DEBUG)
         for i in array_poolinfo:
             i.update({'timestamp': ltime})
 
