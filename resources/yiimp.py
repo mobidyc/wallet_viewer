@@ -7,7 +7,7 @@ from config import *
 
 
 @threaded
-def get_poolinfo_yiimp(url, debug=False):
+def get_poolinfo_yiimp(url, timestamp, debug=False):
     """
     Retrieve pool currency informations for YIIMP type api
     """
@@ -31,6 +31,7 @@ def get_poolinfo_yiimp(url, debug=False):
                 coinname = poolcurr[coin]['name']
                 poolinfo = {
                     'tag': 'poolinfo',
+                    'timestamp': timestamp,
                     'url': apiurl,
                     'coinname': coinname,
                     'currency': coin,

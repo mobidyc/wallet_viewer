@@ -7,7 +7,7 @@ from resources.functions import *
 from config import *
 
 
-def getCoinMarket(info, debug=False):
+def getCoinMarket(info, timestamp, debug=False):
     name = info["name"]
     api = info["apiurl"]
     url = '{0}/?convert=EUR&limit=0'.format(api)
@@ -31,6 +31,7 @@ def getCoinMarket(info, debug=False):
         try:
             coin_info = {
                 'tag': 'marketcap',
+                'timestamp': timestamp,
                 'coinname': coin['name'],
                 'currency': coin['symbol'],
                 'rank': float_value(coin['rank']),

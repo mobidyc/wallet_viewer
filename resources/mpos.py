@@ -23,7 +23,7 @@ def _get_mpos_info(url, apikey, debug=False):
 
 
 @threaded
-def get_poolinfo_mpos(url, apikey, debug=False):
+def get_poolinfo_mpos(url, apikey, timestamp, debug=False):
     poolinfo = _get_mpos_info(url, apikey)
 
     pool_arr = []
@@ -36,6 +36,7 @@ def get_poolinfo_mpos(url, apikey, debug=False):
         try:
             poolinfo = {
                 'tag': 'poolinfo',
+                'timestamp': timestamp,
                 'url': url,
                 'coinname': pool['coinname'],
                 'currency': pool['currency'],

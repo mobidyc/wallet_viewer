@@ -20,16 +20,16 @@ from resources.mpos import *
 from resources.coinmarket import *
 
 
-def get_pools_infos(config, debug=False):
+def get_pools_infos(config, timestamp, debug=False):
     pools_tested = []
     myruns = []
 
     for pool in config['pools']:
         if pool['type'] == 'mpos':
-            poolinfo = get_poolinfo_mpos(pool['url'], pool['api_key'], debug)
+            poolinfo = get_poolinfo_mpos(pool['url'], pool['api_key'], timestamp, debug)
             myruns.append(poolinfo)
         elif pool['type'] == 'yiimp':
-            poolinfo = get_poolinfo_yiimp(pool['url'], debug)
+            poolinfo = get_poolinfo_yiimp(pool['url'], timestamp, debug)
             myruns.append(poolinfo)
         else:
             print 'Unknown pool {0}: {1}'.format(pool['url'], pool['type'])
@@ -43,7 +43,7 @@ def get_pools_infos(config, debug=False):
 
     return pools_tested
 
-def get_wallet_infos(config):
+def get_wallet_infos(config, timestamp):
     wallet_infos = []
     for coin in config['coins']:
         print "{0}...".format(coin),
@@ -92,7 +92,7 @@ def get_wallet_infos(config):
                         'currency': coin,
                         'wallet': wallet,
                         'balance': myval,
-                        'timestamp': ltime
+                        'timestamp': timestamp
                     }
 
                 wallet_infos.append(esdata)
@@ -105,45 +105,36 @@ if __name__ == '__main__':
         if DEBUG:
             print "DEBUG: mode activated"
 
+        """ VARIABLES INITIATED EACH LOOP """
         now = datetime.utcnow()
         today = now.strftime("%Y-%m-%d")
-        ltime = now.strftime("%Y-%m-%dT%H:%M:%S") + ".%03d" % (now.microsecond / 1000) + "Z"
+        ts = now.strftime("%Y-%m-%dT%H:%M:%S") + ".%03d" % (now.microsecond / 1000) + "Z"
         index_date = '{name}-{date}'.format(name = index_name, date = today)
+        array_marketcap = []
 
         create_index(es, index_date, index_alias, index_settings)
 
-        """
-        We do not want to run marketcap every ticks
-        """
-        array_marketcap = []
+        """ We do not want to run marketcap every ticks """
         try:
             marketcap_tick += 1
         except NameError:
             marketcap_tick = marketcap_tick_times
 
+        """ START MARKETCAP """
         if marketcap_tick >= marketcap_tick_times:
             marketcap_tick = 0
-            """
-            START MARKETCAP
-            """
             print 'Mamamaaaamarketcap!!!!...'
-            array_marketcap = getCoinMarket(config['marketcap'])
+            array_marketcap = getCoinMarket(config['marketcap'], now)
             if array_marketcap:
-                for i in array_marketcap:
-                    i.update({'timestamp': ltime})
                 # Ingest to ES
                 send_bulk(es, array_marketcap, index_date, index_name)
-            """
-            END MARKETCAP
-            """
+        """ END MARKETCAP """
 
         print "pool infos... "
-        array_poolinfo = get_pools_infos(config, DEBUG)
-        for i in array_poolinfo:
-            i.update({'timestamp': ltime})
+        array_poolinfo = get_pools_infos(config, ts, DEBUG)
 
         print "wallet infos... "
-        array_wallets = get_wallet_infos(config)
+        array_wallets = get_wallet_infos(config, ts)
 
         # Ingest to ES
         send_bulk(es, array_poolinfo, index_date, index_name)
