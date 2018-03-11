@@ -102,6 +102,41 @@ def get_wallet_infos(config, timestamp):
     return wallet_infos
 
 
+def get_wallet_value(marketdict, wallets_dict, timestamp):
+    total_bal = {}
+    # sum up all the wallets with same currency
+    for wallet in wallets_dict:
+        print wallet
+        currency = wallet['currency']
+        balance = wallet['balance']
+        if currency in total_bal:
+            amount = total_bal['currency']['balance']
+            add_amount = amount + balance
+            total_bal[currency].update({'balance': add_amount})
+        else:
+            total_bal.update({currency: { 'balance': balance, 'timestamp': timestamp }})
+
+    # multiply amount with price
+    for currency in total_bal:
+        for val in range(len(marketdict)):
+            if marketdict[val]['currency'] == currency:
+                if 'price_eur' in marketdict[val]:
+                    value_eur = float_value(total_bal[currency]['balance']) * float_value(marketdict[val]['price_eur'])
+                    value_eur = round(value_eur, 4)
+                    total_bal[currency].update({'value_eur': value_eur, 'price_eur': marketdict[val]['price_eur']})
+                if 'price_btc' in marketdict[val]:
+                    value_btc = float_value(total_bal[currency]['balance']) * float_value(marketdict[val]['price_btc'])
+                    value_btc = round(value_btc, 4)
+                    total_bal[currency].update({'value_btc': value_btc, 'price_btc': marketdict[val]['price_btc']})
+                if 'price_usd' in marketdict[val]:
+                    value_usd = float_value(total_bal[currency]['balance']) * float_value(marketdict[val]['price_usd'])
+                    value_usd = round(value_usd, 4)
+                    total_bal[currency].update({'value_usd': value_usd, 'price_usd': marketdict[val]['price_usd']})
+                break
+
+    return total_bal
+
+
 if __name__ == '__main__':
     es = Elasticsearch( [es_ip], port=es_port, raise_on_error = False)
     while True:
@@ -129,9 +164,13 @@ if __name__ == '__main__':
         print "wallet infos... "
         array_wallets = get_wallet_infos(config, ts)
 
+        print "Internal computation"
+        total_balances = get_wallet_value(array_marketcap, array_wallets, ts)
+
         # Ingest to ES
         send_bulk(es, array_poolinfo, index_date, index_name)
         send_bulk(es, array_wallets, index_date, index_name)
+        send_bulk(es, total_balances, index_date, index_name)
 
         print "Wait for {0} seconds".format(ticktime)
         time.sleep(ticktime)

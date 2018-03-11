@@ -21,7 +21,7 @@ def float_value(val):
     try:
         return Decimal(val)
     except:
-        return 0.0
+        return Decimal(0.0)
 
 
 def get_url_json(url):
