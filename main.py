@@ -36,7 +36,7 @@ def get_pools_infos(config, timestamp, debug=False):
 
     # Wait for all threads to finish and get the data
     for i in range(len(myruns)):
-        result = myruns[i].result_queue.get()
+        result = myruns[i].result_queue.get(True, 30)
         if result:
             for i in result:
                 pools_tested.append(i)
