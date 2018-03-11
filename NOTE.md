@@ -1,4 +1,4 @@
 requirements.txt generated with:
 
-sudo pip2 install pipreqs
+sudo pip3.5 install pipreqs
 pipreqs .
