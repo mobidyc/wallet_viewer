@@ -34,7 +34,6 @@ def getCoinMarket(info, timestamp, debug=False):
                 'timestamp': timestamp,
                 'coinname': coin['name'],
                 'currency': coin['symbol'],
-                'rank': float_value(coin['rank']),
                 'price_usd': float_value(coin['price_usd']),
                 'price_btc': float_value(coin['price_btc']),
                 '24h_volume_usd': float_value(coin['24h_volume_usd']),
