@@ -114,17 +114,20 @@ def get_wallet_value(marketdict, wallets_dict, timestamp):
     for wallet in wallets_dict:
         currency = wallet['currency']
         balance = wallet['balance']
-        if currency in total_bal:
-            amount = total_bal['currency']['balance']
-            add_amount = amount + balance
-            total_bal[currency].update({'balance': add_amount})
-        else:
-            total_bal.update({currency: { 'balance': balance, 'timestamp': timestamp }})
+        if balance:
+            if currency in total_bal:
+                amount = total_bal['currency']['balance']
+                add_amount = amount + balance
+                total_bal[currency].update({'balance': add_amount})
+            else:
+                total_bal.update({currency: { 'balance': balance, 'timestamp': timestamp, 'currency': currency }})
 
     # multiply amount with price
+    array_bals = []
     for currency in total_bal:
         for val in range(len(marketdict)):
-            if marketdict[val]['currency'] == currency:
+            # If we have the currency in marketdict AND we have a balance
+            if marketdict[val]['currency'] == currency and total_bal[currency]['balance']:
                 if 'price_eur' in marketdict[val]:
                     value_eur = float_value(total_bal[currency]['balance']) * float_value(marketdict[val]['price_eur'])
                     value_eur = round(value_eur, 4)
@@ -138,8 +141,9 @@ def get_wallet_value(marketdict, wallets_dict, timestamp):
                     value_usd = round(value_usd, 4)
                     total_bal[currency].update({'value_usd': value_usd, 'price_usd': marketdict[val]['price_usd']})
                 break
+        array_bals.append(total_bal[currency])
 
-    return total_bal
+    return array_bals
 
 
 if __name__ == '__main__':
