@@ -20,6 +20,9 @@ def getCoinMarket(info, timestamp, debug=False):
         res = get_url_json(url)
         write_log(log_file, res, "w")
 
+    if not res:
+        return False
+
     coins_array = []
     for coin in res:
         try:

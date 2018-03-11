@@ -37,7 +37,12 @@ def get_pools_infos(config, timestamp, debug=False):
 
     # Wait for all threads to finish and get the data
     for i in range(len(myruns)):
-        result = myruns[i].result_queue.get(True, 30)
+        try:
+            result = myruns[i].result_queue.get(True, 30)
+            myruns[i].join() #proper delete if the computation has take less than timeout seconds
+        except:
+            continue
+
         if result:
             for i in result:
                 pools_tested.append(i)

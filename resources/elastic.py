@@ -19,6 +19,9 @@ def create_index(es, index, index_alias, settings={}, mappings={}):
     except Exception:
         print("Generic Exception: {}".format(traceback.format_exc()))
         return False
+    except:
+        print("create_index error")
+        return False
 
 
 def send_bulk(es, body, index, doctype, err=False):
@@ -28,3 +31,6 @@ def send_bulk(es, body, index, doctype, err=False):
         print('ES Error: {0}'.format(e.error))
     except Exception:
         print("Generic Exception: {}".format(traceback.format_exc()))
+    except:
+        print("send_bulk error")
+        return False

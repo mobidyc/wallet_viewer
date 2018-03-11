@@ -45,6 +45,9 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
             except Exception:
                 print("Generic Exception: {}".format(traceback.format_exc()))
                 continue
+            except:
+                print("get_poolinfo_yiimp error")
+                continue
     return pool_arr
 
 

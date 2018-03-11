@@ -51,6 +51,9 @@ def get_poolinfo_mpos(url, apikey, timestamp, debug=False):
         except Exception:
             print("Generic Exception: {}".format(traceback.format_exc()))
             return False
+        except:
+            print("get_poolinfo_mpos error")
+            return False
 
     return pool_arr
 
