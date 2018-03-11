@@ -5,7 +5,7 @@ import requests
 import json
 import traceback
 import threading
-import Queue
+import queue as Queue
 
 from requests.packages.urllib3.exceptions import InsecureRequestWarning, InsecurePlatformWarning, SNIMissingWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -28,10 +28,10 @@ def get_url_json(url):
     try:
         r = requests.get(url, verify=False)
     except requests.exceptions.RequestException as e:
-        print "Get URL error: {0} - {1}".format(url, e)
+        print("Get URL error: {0} - {1}".format(url, e))
         return False
     except Exception:
-        print "Generic Exception: {}".format(traceback.format_exc())
+        print("Generic Exception: {}".format(traceback.format_exc()))
         return False
 
     if r.status_code is not 200:
@@ -40,7 +40,7 @@ def get_url_json(url):
     try:
         result = json.loads(r.content)
     except ValueError:
-        print "Decoding JSON has failed"
+        print("Decoding JSON has failed")
         return False
 
     if isinstance(result, dict):
@@ -51,7 +51,7 @@ def get_url_json(url):
 
 # need to handle lists
 def getval_from_struct(refer_value, abstract_struct, mydict):
-    for key, val in abstract_struct.iteritems():
+    for key, val in abstract_struct.items():
         if val == refer_value:
             return mydict[key]
         elif isinstance(val, list):
@@ -67,7 +67,7 @@ def write_log(dest, txt, mode):
         with open(dest, mode) as outfile:
             json.dump(txt, outfile, indent=4)
     except Exception:
-        print "Generic Exception: {}".format(traceback.format_exc())
+        print("Generic Exception: {}".format(traceback.format_exc()))
 
 
 def threaded(f, daemon=False):
@@ -98,3 +98,25 @@ def threaded(f, daemon=False):
         return t
 
     return wrap
+
+
+def deadline(timeout, *args, **kwargs):
+    """is a the decorator name with the timeout parameter in second"""
+    def decorate(f):
+        """ the decorator creation """
+        def handler(signum, frame):
+            """ the handler for the timeout """
+            raise TimeoutException() #when the signal have been handle raise the exception
+
+        def new_f(*args, **kwargs):
+            """ the initiation of the handler,
+            the lauch of the function and the end of it"""
+            signal.signal(signal.SIGALRM, handler) #link the SIGALRM signal to the handler
+            signal.alarm(timeout) #create an alarm of timeout second
+            res = f(*args, **kwargs) #lauch the decorate function with this parameter
+            signal.alarm(0) #reinitiate the alarm
+            return res #return the return value of the fonction
+
+        new_f.__name__ = f.__name__
+        return new_f
+    return decorate

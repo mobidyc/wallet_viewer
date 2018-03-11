@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
 
 import sys
@@ -10,6 +10,7 @@ import ast
 from datetime import datetime
 from elasticsearch import Elasticsearch
 import pprint
+import queue as Queue
 
 # Internal imports
 from config import *
@@ -32,7 +33,7 @@ def get_pools_infos(config, timestamp, debug=False):
             poolinfo = get_poolinfo_yiimp(pool['url'], timestamp, debug)
             myruns.append(poolinfo)
         else:
-            print 'Unknown pool {0}: {1}'.format(pool['url'], pool['type'])
+            print('Unknown pool {0}: {1}'.format(pool['url'], pool['type']))
 
     # Wait for all threads to finish and get the data
     for i in range(len(myruns)):
@@ -46,7 +47,7 @@ def get_pools_infos(config, timestamp, debug=False):
 def get_wallet_infos(config, timestamp):
     wallet_infos = []
     for coin in config['coins']:
-        print "{0}...".format(coin),
+        print("{0}...".format(coin),)
 
         # Try to get the current balance on all wallets
         for wallet in config['coins'][coin]['wallets']:
@@ -61,7 +62,7 @@ def get_wallet_infos(config, timestamp):
                 log_file = "{tmp}/{coin}-{wallet}-0.log".format(tmp=temp_folder, coin=coin, wallet=wallet)
                 url = explorer_url.replace('@WALLET@', wallet)
                 if DEBUG:
-                    print "DEBUG: Explorer ({0}) currency ({1}) wallet ({2})".format(url, coin, wallet)
+                    print("DEBUG: Explorer ({0}) currency ({1}) wallet ({2})".format(url, coin, wallet))
                     balance = json.load(open(log_file))
                 else:
                     balance = get_url_json(url)
@@ -75,7 +76,7 @@ def get_wallet_infos(config, timestamp):
                 except TypeError:
                     pass
                 except Exception:
-                    print "Generic Exception: {}".format(traceback.format_exc())
+                    print("Generic Exception: {}".format(traceback.format_exc()))
                     continue
 
                 # If abstractstruct is not defined, we should have the value
@@ -106,7 +107,6 @@ def get_wallet_value(marketdict, wallets_dict, timestamp):
     total_bal = {}
     # sum up all the wallets with same currency
     for wallet in wallets_dict:
-        print wallet
         currency = wallet['currency']
         balance = wallet['balance']
         if currency in total_bal:
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     es = Elasticsearch( [es_ip], port=es_port, raise_on_error = False)
     while True:
         if DEBUG:
-            print "DEBUG: mode activated"
+            print("DEBUG: mode activated")
 
         """ VARIABLES INITIATED EACH LOOP """
         now = datetime.utcnow()
@@ -152,19 +152,19 @@ if __name__ == '__main__':
 
         create_index(es, index_date, index_alias, index_settings, index_mappings)
 
-        print 'Mamamaaaamarketcap!!!!...'
+        print('Mamamaaaamarketcap!!!!...')
         array_marketcap = getCoinMarket(config['marketcap'], ts)
         if array_marketcap:
             # Ingest to ES
             send_bulk(es, array_marketcap, index_date, index_name)
 
-        print "pool infos... "
+        print("pool infos... ")
         array_poolinfo = get_pools_infos(config, ts, DEBUG)
 
-        print "wallet infos... "
+        print("wallet infos... ")
         array_wallets = get_wallet_infos(config, ts)
 
-        print "Internal computation"
+        print("Internal computation")
         total_balances = get_wallet_value(array_marketcap, array_wallets, ts)
 
         # Ingest to ES
@@ -172,7 +172,7 @@ if __name__ == '__main__':
         send_bulk(es, array_wallets, index_date, index_name)
         send_bulk(es, total_balances, index_date, index_name)
 
-        print "Wait for {0} seconds".format(ticktime)
+        print("Wait for {0} seconds".format(ticktime))
         time.sleep(ticktime)
 
 

@@ -14,7 +14,7 @@ def getCoinMarket(info, timestamp, debug=False):
 
     log_file = "{0}/{1}.log".format(temp_folder, name)
     if debug:
-        print "DEBUG: mode log file: {}".format(log_file)
+        print("DEBUG: mode log file: {}".format(log_file))
         res = json.load(open(log_file))
     else:
         res = get_url_json(url)
@@ -50,7 +50,7 @@ def getCoinMarket(info, timestamp, debug=False):
                 'market_cap_eur': float_value(coin['market_cap_eur'])
             }
         except Exception:
-            print "Generic Exception: {}".format(traceback.format_exc())
+            print("Generic Exception: {}".format(traceback.format_exc()))
             continue
 
         coins_array.append(coin_info)

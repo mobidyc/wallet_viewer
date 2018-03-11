@@ -17,7 +17,7 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
     pool_arr = []
     if poolstat and poolcurr:
         # Ugly but needed: lowercase the keys
-        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.iteritems()}
+        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.items()}
         try:
             apiurl = poolcurr['apiurl']
             del poolcurr['apiurl']
@@ -43,7 +43,7 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
 
                 pool_arr.append(poolinfo)
             except Exception:
-                print "Generic Exception: {}".format(traceback.format_exc())
+                print("Generic Exception: {}".format(traceback.format_exc()))
                 continue
     return pool_arr
 
@@ -55,7 +55,7 @@ def _get_yiimp_walletex(url, wallet, debug=False):
     log_file = "{0}/YIIMP-poolinfo-wallet.log".format(temp_folder)
 
     if debug:
-        print "DEBUG: YIIMP wallet url: {0}".format(currencies_url)
+        print("DEBUG: YIIMP wallet url: {0}".format(currencies_url))
         wallet = json.load(open(log_file))
     else:
         # Ask the API
@@ -74,7 +74,7 @@ def _get_yiimp_currencies(url, debug=False):
     log_file = "{0}/YIIMP-poolinfo-currency.log".format(temp_folder)
 
     if debug:
-        print "DEBUG: YIIMP currency url: {0}".format(currencies_url)
+        print("DEBUG: YIIMP currency url: {0}".format(currencies_url))
         poolcurr = json.load(open(log_file))
     else:
         # Ask the API
@@ -93,7 +93,7 @@ def _get_yiimp_status(url, debug=False):
     log_file = "{0}/YIIMP-poolinfo-status.log".format(temp_folder)
 
     if debug:
-        print "DEBUG: YIIMP status url: {0}".format(status_url)
+        print("DEBUG: YIIMP status url: {0}".format(status_url))
         poolstat = json.load(open(log_file))
     else:
         # Ask the API

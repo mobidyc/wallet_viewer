@@ -13,7 +13,7 @@ def _get_mpos_info(url, apikey, debug=False):
     log_file = "{0}/MPOS-poolinfo-apikey.log".format(temp_folder)
 
     if debug:
-        print "DEBUG: MPOS info url: {0}".format(weburl)
+        print("DEBUG: MPOS info url: {0}".format(weburl))
         res = json.load(open(log_file))
     else:
         res = get_url_json(weburl)
@@ -49,7 +49,7 @@ def get_poolinfo_mpos(url, apikey, timestamp, debug=False):
 
             pool_arr.append(poolinfo)
         except Exception:
-            print "Generic Exception: {}".format(traceback.format_exc())
+            print("Generic Exception: {}".format(traceback.format_exc()))
             return False
 
     return pool_arr
