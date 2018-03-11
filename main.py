@@ -115,7 +115,7 @@ if __name__ == '__main__':
         index_date = '{name}-{date}'.format(name = index_name, date = today)
         array_marketcap = []
 
-        create_index(es, index_date, index_alias, index_settings)
+        create_index(es, index_date, index_alias, index_settings, index_mappings)
 
         """ We do not want to run marketcap every ticks """
         try:

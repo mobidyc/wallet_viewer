@@ -30,10 +30,22 @@ es_url   = 'http://{0}:{1}'.format(es_ip, es_port)
 
 temp_folder = "/tmp"
 
+""" some fields tye need to be enforced """
+index_mappings = {
+    "mappings" : {
+        "cryptomoney" : {
+            "properties" : {
+                "balance" : { "type" : "float" }
+            }
+        }
+    }
+}
+
+
+
 """
- saved passwd file not to appear in git
- the file "es_access_hidden.py" overwrite
- the above es_* variables
+saved passwd file not to appear in git the file
+"es_access_hidden.py" overwrite the above es_* variables
 """
 try:
     from es_access_hidden import *
