@@ -117,21 +117,11 @@ if __name__ == '__main__':
 
         create_index(es, index_date, index_alias, index_settings, index_mappings)
 
-        """ We do not want to run marketcap every ticks """
-        try:
-            marketcap_tick += 1
-        except NameError:
-            marketcap_tick = marketcap_tick_times
-
-        """ START MARKETCAP """
-        if marketcap_tick >= marketcap_tick_times:
-            marketcap_tick = 0
-            print 'Mamamaaaamarketcap!!!!...'
-            array_marketcap = getCoinMarket(config['marketcap'], ts)
-            if array_marketcap:
-                # Ingest to ES
-                send_bulk(es, array_marketcap, index_date, index_name)
-        """ END MARKETCAP """
+        print 'Mamamaaaamarketcap!!!!...'
+        array_marketcap = getCoinMarket(config['marketcap'], ts)
+        if array_marketcap:
+            # Ingest to ES
+            send_bulk(es, array_marketcap, index_date, index_name)
 
         print "pool infos... "
         array_poolinfo = get_pools_infos(config, ts, DEBUG)

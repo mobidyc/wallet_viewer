@@ -19,10 +19,7 @@ index_settings = { "settings" : {
 }}
 
 # Seconds between iterations
-ticktime = 60
-
-# We want to be kind with marketcap api
-marketcap_tick_times = 3
+ticktime = 300
 
 es_ip    = 'localhost'
 es_port  = '9200'
