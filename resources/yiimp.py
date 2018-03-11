@@ -17,7 +17,7 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
     pool_arr = []
     if poolstat and poolcurr:
         # Ugly but needed: lowercase the keys
-        poolstat = {k.lower() if isinstance(k, basestring) else k: v.lower() if isinstance(v, basestring) else v for k,v in poolstat.items()}
+        poolstat = {k.lower() if isinstance(k, str) else k: v.lower() if isinstance(v, str) else v for k,v in poolstat.items()}
         try:
             apiurl = poolcurr['apiurl']
             del poolcurr['apiurl']
