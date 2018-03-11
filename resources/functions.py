@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
+from requests_futures.sessions import FuturesSession
+session = FuturesSession(executor=ThreadPoolExecutor(max_workers=10))
+
 import requests
 import json
 import traceback
@@ -25,28 +31,32 @@ def float_value(val):
 
 
 def get_url_json(url):
+    def bg_cb(sess, resp):
+        # parse the json storing the result on the response object
+        try:
+            resp.data = resp.json()
+        except ValueError as e:
+            resp.data = e
+        except:
+            resp.data = "get_url_json bg_cb error"
+
+    future = session.get(url, background_callback=bg_cb)
     try:
-        r = requests.get(url, verify=False)
+        response = future.result()
     except requests.exceptions.RequestException as e:
-        print("Get URL error: {0} - {1}".format(url, e))
+        print("Error: {0}".format(e))
         return False
-    except Exception:
-        print("Generic Exception: {}".format(traceback.format_exc()))
-        return False
-
-    if r.status_code is not 200:
+    except:
+        print("get_url_json error")
         return False
 
-    try:
-        result = json.loads(r.content)
-    except ValueError:
-        print("Decoding JSON has failed")
+    if response.status_code is not 200:
         return False
 
-    if isinstance(result, dict):
-        result.update({"apiurl": url})
+    if isinstance(response.data, dict):
+        response.data.update({"apiurl": url})
 
-    return result
+    return response.data
 
 
 # need to handle lists
@@ -88,7 +98,6 @@ def threaded(f, daemon=False):
         wrapped_f in a new thread and returns the thread object with
         the result queue attached
         """
-
         q = Queue.Queue()
 
         t = threading.Thread(target=wrapped_f, args=(q,)+args, kwargs=kwargs)
