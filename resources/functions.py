@@ -90,7 +90,8 @@ def threaded(f, daemon=False):
         this function calls the decorated function and puts the result in a queue
         """
         ret = f(*args, **kwargs)
-        q.put(ret)
+        """ result blocks, max 30 seconds """
+        q.put(ret, True, 30)
 
     def wrap(*args, **kwargs):
         """
