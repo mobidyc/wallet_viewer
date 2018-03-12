@@ -5,13 +5,11 @@
     "ZCL": { "wallets": [ "t1JReKWkPrNz1jiz67TPkrYXwvbusFXrY8E" ] },
     "RVN": { "wallets": [ "RGn6B8X2u4Qo7dzrEH5y8EKxDSMcAP4SM2" ] },
     "ETH": { "wallets": [ "bf6f070ed73335308e635b0d782b3eb377915f1d" ] },
-    "SCRIV": { "wallets": [ "sT9PSqRbQ7e1fLsKQMvkteWTborXCLCBUJ" ] },
-    "XDG": { "wallets": [ "Eb4naYNCWNdJBuyihjWBzSvohzH7ZqqJZG" ] }
+    "SCRIV": { "wallets": [ "sT9PSqRbQ7e1fLsKQMvkteWTborXCLCBUJ" ] }
   },
   "pools": [
       { "url": "http://antminepool.com", "type": "yiimp" },
       { "url": "https://miningpanda.site", "type": "yiimp" },
-      { "url": "https://pool.noip.ro", "type": "yiimp" },
       { "url": "https://cryptopool.party", "type": "yiimp" },
       { "url": "http://arcpool.com/site/api", "type": "yiimp" },
       { "url": "http://stratum.luckypool.org", "type": "mpos", "api_key": "ca1e6e72570ff851d1db2d9249ac384ca6fe92ecf9c8b4569608985f05c48a72", "user": "mobidyc"},
