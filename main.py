@@ -85,14 +85,14 @@ def get_wallet_infos(config, timestamp):
                     continue
 
                 # If abstractstruct is not defined, we should have the value
-                if not abstractstruct:
+                if not abstractstruct and balance:
                     myval = balance
                 else:
                     if balance:
                         myval = getval_from_struct('@WWW@', ast.literal_eval(abstractstruct), balance)
                         myval = float_value(myval)
                     else:
-                        myval = 0
+                        myval = 0.0
 
                 esdata = {
                         'tag': 'balance',
