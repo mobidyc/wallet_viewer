@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
 
 import traceback
@@ -17,7 +17,12 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
     pool_arr = []
     if poolstat and poolcurr:
         # Ugly but needed: lowercase the keys
-        poolstat = {k.lower() if isinstance(k, str) else k: v.lower() if isinstance(v, str) else v for k,v in poolstat.items()}
+        try:
+            poolstat = {k.lower() if isinstance(k, str) else k: v.lower() if isinstance(v, str) else v for k,v in poolstat.items()}
+        except:
+            print("Error decoding poolstat from url: {0}".format(url))
+            return pool_arr
+
         try:
             apiurl = poolcurr['apiurl']
             del poolcurr['apiurl']
@@ -43,7 +48,7 @@ def get_poolinfo_yiimp(url, timestamp, debug=False):
 
                 pool_arr.append(poolinfo)
             except Exception:
-                print("Generic Exception: {}".format(traceback.format_exc()))
+                print("Generic Exception yiimp: {0} - url: {1}".format(traceback.format_exc()), url)
                 continue
             except:
                 print("get_poolinfo_yiimp error")

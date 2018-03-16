@@ -81,7 +81,7 @@ def get_wallet_infos(config, timestamp):
                 except TypeError:
                     pass
                 except Exception:
-                    print("Generic Exception: {}".format(traceback.format_exc()))
+                    print("Generic Exception: {0} - coin:{1}".format(traceback.format_exc()), coin)
                     continue
 
                 # If abstractstruct is not defined, we should have the value

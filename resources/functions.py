@@ -77,7 +77,8 @@ def write_log(dest, txt, mode):
         with open(dest, mode) as outfile:
             json.dump(txt, outfile, indent=4)
     except Exception:
-        print("Generic Exception: {}".format(traceback.format_exc()))
+        # print("write_log exception: {0} - dest:{1}".format(traceback.format_exc()), dest)
+        pass
 
 
 def threaded(f, daemon=False):
